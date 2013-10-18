@@ -1,0 +1,41 @@
+{
+  "PORT": 3240,
+  "HOOK_SECRET": "hushhush",
+  "PERIODIC_INTERVAL": 1200,
+
+  "POST_RECEIVE_HOOKS": {
+    "joshfire.com/build": {
+      "reponame": "joshfire.com",
+      "ref": "refs/heads/master",
+      "action": {
+        "origin": "git@github.com:joshfire/joshfire.com.git",
+        "script": "tools/build.sh"
+      }
+    },
+    "joshfire.com/publish": {
+      "reponame": "joshfire.com",
+      "ref": "refs/heads/build",
+      "action": {
+        "origin": "git@github.com:joshfire/joshfire.com.git",
+        "script": "tools/publish.sh",
+        "env": {
+          "GANDI_USERNAME": "714455"
+        }
+      }
+    }
+  },
+
+  "PERIODIC_HOOKS": {
+    "joshfire.com": {
+      "action": {
+        "origin": "git@github.com:joshfire/joshfire.com.git",
+        "check": "tools/updatefeeds.sh",
+        "script": "tools/build.sh"
+      }
+    }
+  },
+
+  "KEY_DEPLOYMACHINE": "override with private SSH key of deploy machine",
+
+  "WOODMAN": "console"
+}
