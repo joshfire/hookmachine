@@ -27,15 +27,13 @@
 
   "PERIODIC_HOOKS": {
     "joshfire.com": {
-      "action": {
-        "origin": "git@github.com:joshfire/joshfire.com.git",
-        "check": "tools/updatefeeds.sh",
-        "script": "tools/build.sh"
-      }
+      "origin": "git@github.com:joshfire/joshfire.com.git",
+      "check": "tools/updatefeeds.sh",
+      "script": "tools/build.sh"
     }
   },
 
-  "KEY_DEPLOYMACHINE": "override with private SSH key of deploy machine",
+  "KEY_MAIN": "override with private SSH key of deploy machine",
 
   "WOODMAN": "console"
 }

@@ -18,10 +18,11 @@ To install and run the deploy machine locally, run the following commands:
 git clone git@github.com:joshfire/deploymachine.git
 cd deploymachine
 npm install
+export JOSHFIREDEPLOY_KEY_MAIN="the private SSH key"
 npm start
 ```
 
-However, if you do that and nothing else, **tasks will fail!** That's normal: credentials are not part of the repository for obvious security reasons and are more than likely required to run Git commands. You need to set them up as environment variables. See [Configuration](#Configuration) section below.
+Note that you need to set the `JOSHFIREDEPLOY_KEY_MAIN` variable to the contents of the private SSH key allowed to pull/push to the Git server(s) used within the scripts before you may run the server. For obvious security reasons, credentials are not part of the repository.
 
 
 ## Configuration
@@ -98,7 +99,7 @@ Each hook describes an action to perform, defined by the following properties:
 
 - `origin` (required): the Git origin of the repository to clone.
 - `script` (required): the relative path to the script to run, starting from the root folder of the repository. The script is always run in the absence of a `check` property. It is run depending on the exit status of the `check` script otherwise.
-- `privatekey` (optional): the name of the configuration setting that contains the private SSH key to use in Git operations. If not provided, the deploy machine will use the value of the `KEY_DEPLOYMACHINE` setting. Note that all private keys must start with `KEY_` to be correctly picked up by the server at startup.
+- `privatekey` (optional): the name of the configuration setting that contains the private SSH key to use in Git operations. If not provided, the deploy machine will use the value of the `KEY_MAIN` setting. This mechanism lets you use more than one private SSH key if needed. Note that all private keys must start with `KEY_` to be correctly picked up as private SSH keys by the server at startup.
 - `branch` (optional): the branch to checkout, `master` if not provided
 - `check` (optional): the relative path to the script to run to detect changes. If the script returns with an exit code `42`, the script targeted by the `script` property is run. Nothing happens otherwise.
 - `env` (optional): an object that describes additional environment variables to pass to the scripts to run.
@@ -108,7 +109,7 @@ Each hook describes an action to perform, defined by the following properties:
 
 #### Private SSH key
 
-The deploy machine will typically pull/push private Git repositories to different remotes and thus needs to have the appropriate permissions on these repositories. The machine will run all Git commands using the contents of the `KEY_DEPLOYMACHINE` setting as private SSH key.
+The deploy machine will typically pull/push private Git repositories to different remotes and thus needs to have the appropriate permissions on these repositories. The machine will run all Git commands using the contents of the `KEY_MAIN` setting as private SSH key.
 
 ```
 -----BEGIN RSA PRIVATE KEY-----
@@ -124,7 +125,7 @@ To test things locally, you may create a `config.json` file (ignored by Git) tha
 
 ```json
 {
-  "KEY_DEPLOYMACHINE": "-----BEGIN RSA PRIVATE KEY-----\n[...]\n-----END RSA PRIVATE KEY-----"
+  "KEY_MAIN": "-----BEGIN RSA PRIVATE KEY-----\n[...]\n-----END RSA PRIVATE KEY-----"
 }
 ```
 

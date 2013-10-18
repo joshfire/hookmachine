@@ -92,7 +92,7 @@ Object.keys(hooks).forEach(function (name) {
     var params = JSON.parse(JSON.stringify(hook.action));
     params.from = 'github';
     params.dataFolder = dataFolder;
-    params.privatekey = params.privatekey || 'KEY_DEPLOYMACHINE';
+    params.privatekey = params.privatekey || 'KEY_MAIN';
     taskqueue.push(params);
   });
 });
@@ -112,11 +112,11 @@ setInterval(function () {
   var hooks = config.PERIODIC_HOOKS || {};
   Object.keys(hooks).forEach(function (name) {
     var hook = hooks[name];
-    var params = JSON.parse(JSON.stringify(hook.action));
+    var params = JSON.parse(JSON.stringify(hook.action || hook));
     params.from = 'monitoring';
     params.dataFolder = dataFolder;
-    params.privatekey = params.privatekey || 'KEY_DEPLOYMACHINE';
-    logger.log('queued new monitoring action: ' + name);
+    params.privatekey = params.privatekey || 'KEY_MAIN';
+    logger.log('queued new monitoring action for ' + name);
     taskqueue.push(params);
   });
   logger.info('periodic check... done');
