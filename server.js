@@ -48,7 +48,6 @@ var deploykeys = Object.keys(config).filter(function (key) {
 });
 deploykeys.forEach(function (name) {
   logger.log('Save deploy key ' + name + '...');
-  logger.log(config[name]);
   fs.writeFileSync(
     path.join(deploykeysFolder, name),
     config[name], {
