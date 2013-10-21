@@ -1,6 +1,6 @@
 {
   "PORT": 3240,
-  "HOOK_SECRET": "hushhush",
+  "HOOK_SECRET": "",
   "PERIODIC_INTERVAL": 1200,
 
   "POST_RECEIVE_HOOKS": {
