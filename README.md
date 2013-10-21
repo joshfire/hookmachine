@@ -156,6 +156,12 @@ The deploy machine uses the file system to store things, in the `data` folder by
 - a `repositories` folder that contains clones of the repositories that had to be cloned
 - a `tasks` folder that contains the tasks that are either pending, running or processed by the server.
 
+### Dependencies
+
+As many other projects, the deploy machine depends on a few external libraries, listed in `package.json` and installed with a call to `npm install`. Perhaps more surprisingly, note that `npm` is actually explicitly listed as a dependency. Do not remove it, that's on purpose!
+
+This is meant for environments such as Heroku that do not expose the `npm` utility once the deploy is over. In practice, the deploy machine needs to clone Git repositories once in a while and needs to run `npm install` on the result. Hence the dependency to force the installation of `npm` during the deploy. The `gitaction.sh` file targets `node_modules/.bin/npm` when it needs to issue NPM commands.
+
 ### Logs
 
 The deploy machine uses [Woodman](http://joshfire.github.io/woodman/) to send logs to the console (override the `WOODMAN` setting to change Woodman's configuration), reporting errors as they occur.

@@ -84,7 +84,7 @@ then
   echo "Clone repository..."
   git clone ${REPO} ${REPOFOLDER}
   cd ${REPOFOLDER}
-  npm install
+  ../../../node_modules/.bin/npm install
   cd ..
   echo "Clone repository... done"
 fi
@@ -101,7 +101,7 @@ if [ "${remote}" != "" ]
 then
   echo "Pull latest version of repository..."
   git pull
-  npm install
+  ../../../node_modules/.bin/npm install
   echo "Pull latest version of repository... done"
 fi
 echo "Ensure we have latest version of ${BRANCH} branch... done"
