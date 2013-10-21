@@ -1,4 +1,4 @@
-# The Incredible Deploy Machine
+# The Git Deploy Machine
 
 The deploy machine is a Web server that listens to push events received from GitHub through [Post-receive hooks](https://help.github.com/articles/post-receive-hooks) and/or detects changes to some condition periodically and runs some Git related deploy action accordingly.
 
@@ -18,11 +18,11 @@ To install and run the deploy machine locally, run the following commands:
 git clone git@github.com:joshfire/deploymachine.git
 cd deploymachine
 npm install
-export JOSHFIREDEPLOY_KEY_MAIN="the private SSH key"
+export DEPLOYMACHINE_KEY_MAIN="the private SSH key"
 npm start
 ```
 
-Note that you need to set the `JOSHFIREDEPLOY_KEY_MAIN` variable to the contents of the private SSH key allowed to pull/push to the Git server(s) used within the scripts before you may run the server. For obvious security reasons, credentials are not part of the repository.
+Note that you need to set the `DEPLOYMACHINE_KEY_MAIN` variable to the contents of the private SSH key allowed to pull/push to the Git server(s) used within the scripts before you may run the server. For obvious security reasons, credentials are not part of the repository.
 
 
 ## Configuration
@@ -33,16 +33,16 @@ The server reads its configuration from the `config.defaults.json` file. In part
 
 If the folder contains a `config.json` file, its variables will replace those of the `config.defaults.json` file.
 
-Also, for each resulting setting, if the environment contains a variable with the same name prefixed with `JOSHFIREDEPLOY_`, then its value is used. For instance, to override the hook secret used between GitHub and the Web server of the deploy machine (the `HOOK_SECRET` setting, you may use:
+Also, for each resulting setting, if the environment contains a variable with the same name prefixed with `DEPLOYMACHINE_`, then its value is used. For instance, to override the hook secret used between GitHub and the Web server of the deploy machine (the `HOOK_SECRET` setting, you may use:
 
 ```
-export JOSHFIREDEPLOY_HOOK_SECRET="SuperSecret"
+export DEPLOYMACHINE_HOOK_SECRET="SuperSecret"
 ```
 
 Or, if you are deploying the deploy machine on Heroku:
 
 ```
-heroku config:set JOSHFIREDEPLOY_HOOK_SECRET="SuperSecret"
+heroku config:set DEPLOYMACHINE_HOOK_SECRET="SuperSecret"
 ```
 
 
