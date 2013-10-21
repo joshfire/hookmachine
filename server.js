@@ -55,6 +55,27 @@ deploykeys.forEach(function (name) {
       mode: 384 // 600 in octal, restricted rights on private SSH key
     }
   );
+
+  // To use the private SSH key, we need to create a custom version of
+  // "ssh-noprompt.sh" that references the key. Note that the key cannot
+  // simply be set in the GIT_SSH_TMPKEY environment because that would
+  // only work for the "git clone" commands and not for the subsequent
+  // "npm install" call (which only preserves the GIT_SSH variable). In
+  // other words, this would not work if the repository depends on another
+  // private repository using a "git+ssh" URL.
+  var gitssh = 'ssh -i ' +
+    path.resolve(deploykeysFolder, name) +
+    ' -o IdentitiesOnly=yes' +
+    ' -o BatchMode=yes' +
+    ' -o UserKnownHostsFile=/dev/null' +
+    ' -o StrictHostKeyChecking=no' +
+    ' $@';
+  fs.writeFileSync(
+    path.join(deploykeysFolder, 'ssh-' + name + '.sh'),
+    gitssh, {
+      encoding: 'utf8',
+      mode: 448 // 700 in octal, to add execution rights
+    });
   logger.log('Save deploy key ' + name + '... done');
 });
 logger.log('Save deploy keys in ' + deploykeysFolder + '... done');
