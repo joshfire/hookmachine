@@ -33,7 +33,11 @@
     "joshfire.com": {
       "origin": "git@github.com:joshfire/joshfire.com.git",
       "check": "tools/updatefeeds.sh",
-      "script": "tools/build.sh"
+      "script": "tools/build.sh",
+      "env": {
+        "GIT_USERNAME": "Deploy machine",
+        "GIT_USEREMAIL": "heroku@joshfire.com"
+      }
     }
   },
 
