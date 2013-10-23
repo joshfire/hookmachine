@@ -15,6 +15,42 @@ var woodman = require('woodman');
 var fs = require('fs');
 var path = require('path');
 
+/**
+ * Small helper function that deletes recursively deletes a folder
+ *
+ * The function runs synchronously. Errors are reported but ignored.
+ *
+ * @function
+ * @param {string} path Folder to delete
+ */
+var deleteFolder = function (path) {
+  var recDeleteFolder = function (path) {
+    var files = [];
+    if (!fs.existsSync(path)) return;
+    files = fs.readdirSync(path);
+    files.forEach(function (file) {
+      var currPath = path + '/' + file;
+      if (fs.statSync(currPath).isDirectory()) {
+        recDeleteFolder(currPath);
+      } else {
+        fs.unlinkSync(currPath);
+      }
+    });
+    fs.rmdirSync(path);
+  };
+
+  logger.log('Delete folder "' + path + '"...');
+  try {
+    recDeleteFolder(path);
+  }
+  catch (err) {
+    logger.error('Delete folder "' + path + '"... an error occurred', err);
+    return;
+  }
+  logger.log('Delete folder "' + path + '"... done');
+};
+
+
 woodman.load(config.WOODMAN || 'console');
 var logger = woodman.getLogger('server');
 logger.log('Server starting...');
@@ -36,13 +72,29 @@ var taskqueue = new TaskQueue(gitaction, {
   maxItems: 1
 });
 
+logger.log('Clean deploy keys folder...');
+var deploykeysFolder = path.join(dataFolder, 'deploykeys');
+deleteFolder(deploykeysFolder);
+logger.log('Clean deploy keys folder... done');
+
+// The "repositories" folder may contain a hell of a lot of files.
+// To avoid spending one minute deleting files before the server
+// is up and running, let's park its contents to some other folder,
+// that will be suppressed after the server has started.
+var repositoriesFolder = path.join(dataFolder, 'repositories');
+var repositoriesBakFolder = path.join(dataFolder, 'repositories-bak');
+if (fs.existsSync(repositoriesFolder)) {
+  logger.log('Move repositories folder...');
+  if (fs.existsSync(repositoriesBakFolder)) {
+    deleteFolder(repositoriesBakFolder);
+  }
+  fs.renameSync(repositoriesFolder, repositoriesBakFolder);
+  logger.log('Move repositories folder... done');
+}
 
 // Save deploy keys in "deploykeys" folder
-var deploykeysFolder = path.join(dataFolder, 'deploykeys');
 logger.log('Save deploy keys in ' + deploykeysFolder + '...');
-if (!fs.existsSync(deploykeysFolder)) {
-  fs.mkdirSync(deploykeysFolder);
-}
+fs.mkdirSync(deploykeysFolder);
 var deploykeys = Object.keys(config).filter(function (key) {
   return key.match(/^KEY_/);
 });
@@ -146,8 +198,18 @@ logger.log('start monitoring... done, ' +
   Object.keys(config.PERIODIC_HOOKS || {}).length + ' tasks monitored');
 
 
-// Start GitHub hooks listener
+// Start GitHub hooks listener and delete the "repositories" folder
+// (deletion is done afterwards because that may take time and some
+// server environments might impose a startup timeout. TODO: switch
+// to an async version, otherwise deletion could make incoming requests
+// time out)
 github.listen(function () {
   logger.info('Server started on port ' + (config.PORT || '3240'));
   logger.log('Waiting for notifications...');
+
+  if (fs.existsSync(repositoriesBakFolder)) {
+    logger.log('Delete former "repositories" folder...');
+    deleteFolder(repositoriesBakFolder);
+    logger.log('Delete repositories folder... done');
+  }
 });
