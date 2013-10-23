@@ -23,7 +23,9 @@
         "origin": "git@github.com:joshfire/joshfire.com.git",
         "script": "tools/publish.sh",
         "env": {
-          "GANDI_USERNAME": "714455"
+          "GANDI_USERNAME": "714455",
+          "GIT_USERNAME": "Deploy machine",
+          "GIT_USEREMAIL": "heroku@joshfire.com"
         }
       }
     }
