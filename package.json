@@ -1,6 +1,6 @@
 {
   "name": "deploymachine",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Joshfire deploy machine",
   "author": "Joshfire",
   "contributors": [],
@@ -17,6 +17,7 @@
   "dependencies": {
     "amdefine": "0.1.0",
     "async": "0.2.9",
+    "fs-ext": "0.3.2",
     "mkdirp": "0.3.5",
     "node-uuid": "1.4.1",
     "githubhook": "0.5.0",

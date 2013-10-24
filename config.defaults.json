@@ -1,7 +1,6 @@
 {
   "PORT": 3240,
   "HOOK_SECRET": "",
-  "PERIODIC_INTERVAL": 1200,
 
   "POST_RECEIVE_HOOKS": {
     "joshfire.com/build": {
@@ -31,6 +30,9 @@
     }
   },
 
+  "PERIODIC_INTERVAL": 1200,
+  "PERIODIC_SCHEDULED": true,
+
   "PERIODIC_HOOKS": {
     "joshfire.com": {
       "origin": "git@github.com:joshfire/joshfire.com.git",
@@ -45,5 +47,25 @@
 
   "KEY_MAIN": "override with private SSH key of deploy machine",
 
-  "WOODMAN": "console"
+  "WOODMAN": {
+    "appenders": [
+      {
+        "type": "ConsoleAppender",
+        "name": "console",
+        "layout": {
+          "type": "pattern",
+          "pattern": "%-5level | %-15.15logger | %message%n",
+          "compactObjects": true
+        }
+      }
+    ],
+    "loggers": [
+      {
+        "level": "all",
+        "appenders": [
+          "console"
+        ]
+      }
+    ]
+  }
 }
