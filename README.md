@@ -1,14 +1,14 @@
 # Git Hook Machine
 
-> Nétwayé, baléyé, astiké
-> Kaz la toujou penpan
-> Ba’w manjé, baw lanmou
-> E pou vou an ka fèy an chantan
+> "Nétwayé, baléyé, astiké  
+> Kaz la toujou penpan  
+> Ba’w manjé, baw lanmou  
+> E pou vou an ka fèy an chantan"
 >
-> Cleaning, Sweeping, Polishing
-> The house is always clean
-> I cook for you, I give you love
-> Singing along just for you
+> "Cleaning, Sweeping, Polishing  
+> The house is always clean  
+> I cook for you, I give you love  
+> Singing along just for you"
 >
 > [Maldòn by Zouk Machine](http://www.youtube.com/watch?v=BPdrGOFXzGA)
 
