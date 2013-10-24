@@ -6,7 +6,7 @@
 > E pou vou an ka fèy an chantan"
 >
 > "Cleaning, Sweeping, Polishing  
-> The house is always clean  
+> Your home is always clean  
 > I cook for you, I give you love  
 > Singing along just for you"
 >
@@ -16,21 +16,21 @@ The Hook Machine runs shell scripts in a given Git repository in response to `gi
 
 The Hook Machine is useful if:
 
-1. you have a Git repository available on GitHub, be it public or private (other Git hosting services might work as well)
-2. your Git repository contains shell scripts that automate the deployment to the final server (or some other task that you would like to run on the code of the repo);
-3. you would like to deploy the repository whenever someone issues a `git push` command on some branch;
-4. you would like to deploy the repository whenever some external condition changes, for instance because the repo fetches some of its contents from the cloud and needs to be updated when that content changes.
+1. you have a **Git repository** available on GitHub, be it public or private (other Git hosting services might work as well)
+2. your Git repository contains **shell scripts** that automate the deployment to the final server (or some other task that you would like to run on the code of the repo);
+3. you would like to deploy the repository **whenever someone issues a `git push` command on some branch**;
+4. you would like to deploy the repository **whenever some external condition changes**, for instance because the repo fetches some of its contents from the cloud and needs to be updated when that content changes.
 
 If all points hold, you may want to install the Hook Machine on some server of your own! If you do not need periodic checks (point 4. above), that may not be worth the hassle. Check the concrete example section near the end of this text for a practical scenario.
 
 The Hook Machine is a Node.js application that includes:
 
-- a Web server that listens to `git push` events received from GitHub through [Post-receive hooks](https://help.github.com/articles/post-receive-hooks) and runs a shell script in some Git repository accordingly;
-- a loop that runs shell scripts in Git repositories to detect changes in some condition periodically and reacts based on the result;
-- a local file cache for cloned Git repositories;
-- a simple file queue mechanism to run tasks sequentially in the background.
+- a **Web server** that listens to `git push` events received from GitHub through [Post-receive hooks](https://help.github.com/articles/post-receive-hooks) and runs a shell script in some Git repository accordingly;
+- a **periodic loop** that runs shell scripts in Git repositories to detect changes in some condition and reacts based on the result;
+- a **local file cache** for cloned Git repositories;
+- a simple **file queue mechanism** to run tasks sequentially in the background.
 
-The Hook Machine can typically be installed on a Heroku Dyno but any other not-too-old Linux-based environment where [Node.js](http://nodejs.org/) is installed should work.
+The Hook Machine can typically be installed on [Heroku](http://heroku.com/) but any other not-too-old Linux-based environment where [Node.js](http://nodejs.org/) is installed should work.
 
 
 ## Install and run
@@ -48,7 +48,7 @@ export HOOKMACHINE_KEY_MAIN="some private SSH key"
 npm start
 ```
 
-Check the [Configuration] section below to export set the above variables accordingly.
+Check the [Configuration] section below to set the above variables accordingly.
 
 Once the Hook Machine is up and running, set the WebHook URL of Git repositories that the Hook Machine should manage on GitHub to `[Hook Machine HTTP address]/github/callback?secret=[HOOK_SECRET]` and start pushing.
 
@@ -105,7 +105,7 @@ Notes:
 
 The server checks the `PERIODIC_HOOKS` configuration setting to gather the list of scripts to run periodically. Each hook simply defines the action to run.
 
-The example below runs the `tools/updatefeeds.sh` script of the repository identified by the specified Git origin. If that script exits with status code `42`, the `tools/build.sh` script is run.
+The example below runs the `tools/checkfeeds.sh` script of the repository identified by the specified Git origin. If that script exits with status code `42`, the `tools/build.sh` script is run.
 
 
 ```json
@@ -282,3 +282,14 @@ The following Hook Machine configuration sets the two GitHub post-receive hooks 
 ## License
 
 The Hook Machine is licensed under the [MIT license](https://raw.github.com/joshfire/deploymachine/master/LICENSE). Copyright (c) 2013 Joshfire. All rights reserved.
+
+The Hook Machine uses the following open-source libraries:
+
+- [Almond](https://github.com/jrburke/almond). Copyright (c) 2011-2012, The Dojo Foundation All Rights Reserved. [New BSD or MIT licensed](https://github.com/jrburke/almond/blob/master/LICENSE)
+- [Async.js](https://github.com/caolan/async). Copyright (c) 2010 Caolan McMahon, [MIT licensed](https://github.com/caolan/async/master/LICENSE)
+- [node-github-hook](https://github.com/nlf/node-github-hook/). Programmed by Nathan LaFreniere, Copyright (c) 2012, [MIT licensed](https://github.com/nlf/node-github-hook/blob/master/LICENSE)
+- [mkdirp](https://github.com/substack/node-mkdirp). Copyright 2010 James Halliday (mail@substack.net), [MIT licensed](https://github.com/substack/node-mkdirp/blob/master/LICENSE)
+- [node-uuid](https://github.com/broofa/node-uuid). Copyright (c) 2010-2012 Robert Kieffer, [MIT licensed](https://github.com/broofa/node-uuid/blob/master/LICENSE.md)
+- [npm](https://github.com/isaacs/npm). Copyright (c) Isaac Z. Schlueter. All rights reserved. Released under the [Artistic License 2.0](https://github.com/isaacs/npm/blob/master/LICENSE)
+- [Underscore](http://underscorejs.org/). Copyright (c) 2009-2013 Jeremy Ashkenas, DocumentCloud Inc. MIT licensed
+- [Woodman](http://joshfire.github.io/woodman/). Copyright (c) 2013 Joshfire, all rights reserved, [MIT licensed](http://joshfire.github.io/woodman/about.html#license)
