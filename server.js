@@ -137,7 +137,7 @@ logger.log('Save deploy keys in ' + deploykeysFolder + '... done');
 var github = githubhook({
   host: config.HOST || '0.0.0.0',
   port: config.PORT || '3240',
-  secret: config.HOOKSECRET || '',
+  secret: config.HOOK_SECRET || '',
   logger: woodman.getLogger('githubhook')
 });
 
