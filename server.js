@@ -167,6 +167,15 @@ Object.keys(hooks).forEach(function (name) {
     params.dataFolder = dataFolder;
     params.privatekey = params.privatekey ||
       (config.KEY_MAIN ? 'KEY_MAIN' : '');
+    params.env = params.env || {};
+    params.env.GIT_USERNAME =
+      params.env.GIT_USERNAME ||
+      config.GIT_USERNAME ||
+      'Hook Machine';
+    params.env.GIT_USEREMAIL =
+      params.env.GIT_USEREMAIL ||
+      config.GIT_USERNAME ||
+      'hook.machine@example.org';
     taskqueue.push(params);
   });
 });
@@ -191,6 +200,15 @@ setInterval(function () {
     params.dataFolder = dataFolder;
     params.privatekey = params.privatekey ||
       (config.KEY_MAIN ? 'KEY_MAIN' : '');
+    params.env = params.env || {};
+    params.env.GIT_USERNAME =
+      params.env.GIT_USERNAME ||
+      config.GIT_USERNAME ||
+      'Hook Machine';
+    params.env.GIT_USEREMAIL =
+      params.env.GIT_USEREMAIL ||
+      config.GIT_USERNAME ||
+      'hook.machine@example.com';
     logger.log('queued new monitoring action for ' + name);
     taskqueue.push(params);
   });

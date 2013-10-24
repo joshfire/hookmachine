@@ -1,19 +1,16 @@
 {
   "PORT": 3240,
-  "HOOK_SECRET": "",
-  "PERIODIC_INTERVAL": 1200,
+  "GIT_USERNAME": "Deploy machine",
+  "GIT_USEREMAIL": "heroku@joshfire.com",
 
+  "HOOK_SECRET": "",
   "POST_RECEIVE_HOOKS": {
     "joshfire.com/build": {
       "reponame": "joshfire.com",
       "ref": "refs/heads/master",
       "action": {
         "origin": "git@github.com:joshfire/joshfire.com.git",
-        "script": "tools/build.sh",
-        "env": {
-          "GIT_USERNAME": "Deploy machine",
-          "GIT_USEREMAIL": "heroku@joshfire.com"
-        }
+        "script": "tools/build.sh"
       }
     },
     "joshfire.com/publish": {
@@ -23,27 +20,42 @@
         "origin": "git@github.com:joshfire/joshfire.com.git",
         "script": "tools/publish.sh",
         "env": {
-          "GANDI_USERNAME": "714455",
-          "GIT_USERNAME": "Deploy machine",
-          "GIT_USEREMAIL": "heroku@joshfire.com"
+          "GANDI_USERNAME": "714455"
         }
       }
     }
   },
 
+  "PERIODIC_INTERVAL": 1200,
   "PERIODIC_HOOKS": {
     "joshfire.com": {
       "origin": "git@github.com:joshfire/joshfire.com.git",
       "check": "tools/updatefeeds.sh",
-      "script": "tools/build.sh",
-      "env": {
-        "GIT_USERNAME": "Deploy machine",
-        "GIT_USEREMAIL": "heroku@joshfire.com"
-      }
+      "script": "tools/build.sh"
     }
   },
 
-  "KEY_MAIN": "override with private SSH key of deploy machine",
+  "KEY_MAIN": "",
 
-  "WOODMAN": "console"
+  "WOODMAN": {
+    "appenders": [
+      {
+        "type": "ConsoleAppender",
+        "name": "console",
+        "layout": {
+          "type": "pattern",
+          "pattern": "%-5level | %-15.15logger | %message%n",
+          "compactObjects": true
+        }
+      }
+    ],
+    "loggers": [
+      {
+        "level": "all",
+        "appenders": [
+          "console"
+        ]
+      }
+    ]
+  }
 }
