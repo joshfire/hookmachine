@@ -1,5 +1,3 @@
-# Git Hook Machine
-
 > "Nétwayé, baléyé, astiké  
 > Kaz la toujou penpan  
 > Ba’w manjé, baw lanmou  
@@ -12,12 +10,15 @@
 >
 > [Maldòn by Zouk Machine](http://www.youtube.com/watch?v=BPdrGOFXzGA)
 
+
+# Git Hook Machine
+
 The Hook Machine runs shell scripts in a given Git repository in response to `git push` events sent to GitHub and/or changes in some external condition checked once in a while. The Hook Machine is typically aimed at automating the deployment of a Git repository to some final server but may also be used to run scripts that do **not** deploy anything (test runners, email sending, whatever).
 
 The Hook Machine is useful if:
 
-1. you have a **Git repository** available on GitHub, be it public or private (other Git hosting services might work as well)
-2. your Git repository contains **shell scripts** that automate the deployment to the final server (or some other task that you would like to run on the code of the repo);
+1. you have a **Git repository** available on GitHub, be it public or private. Other Git hosting services might work as well, just not tested at this point;
+2. your Git repository contains **shell scripts** that automate the deployment to some final server, or some other task that you would like to run on the code of the repo;
 3. you would like to deploy the repository **whenever someone issues a `git push` command on some branch**;
 4. you would like to deploy the repository **whenever some external condition changes**, for instance because the repo fetches some of its contents from the cloud and needs to be updated when that content changes.
 
@@ -38,8 +39,8 @@ The Hook Machine can typically be installed on [Heroku](http://heroku.com/) but 
 To install and run the Hook Machine, run the following commands:
 
 ```
-git clone git@github.com:joshfire/deploymachine.git
-cd deploymachine
+git clone git@github.com:joshfire/hookmachine.git
+cd hookmachine
 npm install
 export HOOKMACHINE_POST_RECEIVE_HOOKS="{}"
 export HOOKMACHINE_PERIODIC_HOOKS="{}"
@@ -219,11 +220,11 @@ This is meant for environments such as Heroku that do not expose the `npm` utili
 The Hook Machine uses [Woodman](http://joshfire.github.io/woodman/) to send logs to the console (override the `WOODMAN` setting to change Woodman's configuration), reporting errors as they occur.
 
 
-## A concrete example: publication of the Joshfire Web site
+## A concrete example
 
-Here is a concrete example of how we use the Hook Machine at Joshfire to automate the deployment of our Web site.
+Here is a concrete example of how we use the Hook Machine at Joshfire to automate the deployment of the main [Joshfire.com](http://joshfire.com) Web site.
 
-The [Web site of Joshfire](http://joshfire.com) is a classic Web site assembled from different components:
+The Web site of Joshfire is assembled from different components:
 
 - HTML pages are assembled from [EJS](http://embeddedjs.com/) templates
 - CSS styles are created from [SASS](http://sass-lang.com/) files
@@ -241,7 +242,7 @@ In terms of Git workflow, changes are committed to the `dev` branch and released
 - `publish.sh` pushes the latest build to the Web server
 - `checkfeeds.sh` checks whether feeds have been updated
 
-The contents of these scripts does not matter here. A typical script run a bunch of Grunt, HTTP and Git commands. What matters is that the site needs to be updated whenever `release.sh` is called and whenever `checkfeeds.sh` signals that feeds have been updated. This is precisely where the Hook Machine comes into play!
+The contents of these scripts does not matter here. A typical script runs a bunch of Grunt, HTTP and Git commands. What matters is that the site needs to be updated after a call to `release.sh` and whenever `checkfeeds.sh` signals that feeds have been updated. This is precisely where the Hook Machine comes into play!
 
 The Hook Machine reacts to the `git push origin master` command sent at the end of the `release.sh` script and runs `build.sh` accordingly. In turn, the Hook Machine reacts to the `git push origin build` command sent at the end of the `build.sh` script and runs `publish.sh` accordingly. In parallel, the Hook Machine runs `checkfeeds.sh` periodically to detect feed updates and runs `build.sh` when feeds have been updated (which in turn triggers a `git push origin build` and so on). This is illustrated in the following simplified sequence diagram:
 
@@ -281,7 +282,7 @@ The following Hook Machine configuration sets the two GitHub post-receive hooks 
 
 ## License
 
-The Hook Machine is licensed under the [MIT license](https://raw.github.com/joshfire/deploymachine/master/LICENSE). Copyright (c) 2013 Joshfire. All rights reserved.
+The Hook Machine is licensed under the [MIT license](https://raw.github.com/joshfire/hookmachine/master/LICENSE). Copyright (c) 2013 Joshfire. All rights reserved.
 
 The Hook Machine uses the following open-source libraries:
 

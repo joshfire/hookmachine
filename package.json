@@ -6,13 +6,17 @@
   "contributors": [],
   "repository": {
     "type": "git",
-    "url": "https://github.com/joshfire/deploymachine.git"
+    "url": "https://github.com/joshfire/hookmachine.git"
   },
-  "keywords": [],
+  "keywords": [
+    "GitHub",
+    "hook",
+    "deploy"
+  ],
   "licenses": [
     {
       "type": "MIT",
-      "url": "http://github.com/joshfire/deploymachine/LICENSE"
+      "url": "http://github.com/joshfire/hookmachine/LICENSE"
     }
   ],
   "engines": {
