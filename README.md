@@ -11,20 +11,22 @@
 > [Maldòn by Zouk Machine](http://www.youtube.com/watch?v=BPdrGOFXzGA)
 
 
-# Git Hook Machine
+# Hook Machine
 
-The Hook Machine runs shell scripts in a given Git repository in response to `git push` events sent to GitHub and/or changes in some external condition checked once in a while. The Hook Machine is typically aimed at automating the deployment of a Git repository to some final server but may also be used to run scripts that do **not** deploy anything (test runners, email sending, whatever).
+The Hook Machine runs shell scripts in given Git repositories in response to `git push` events sent to GitHub and/or changes in some external condition checked once in a while. 
+
+The Hook Machine is typically aimed at automating the deployment of one or more Git repositories to some final server but may also be used to run scripts that do **not** deploy anything (test runners, email sending, whatever).
 
 The Hook Machine is useful if:
 
-1. you have a **Git repository** available on GitHub, be it public or private. Other Git hosting services might work as well, just not tested at this point;
+1. you have a **Git repository** available on GitHub, be them public or private. Other Git hosting services might work as well, they are just untested at this point;
 2. your Git repository contains **shell scripts** that automate the deployment to some final server, or some other task that you would like to run on the code of the repo;
 3. you would like to deploy the repository **whenever someone issues a `git push` command on some branch**;
 4. you would like to deploy the repository **whenever some external condition changes**, for instance because the repo fetches some of its contents from the cloud and needs to be updated when that content changes.
 
-If all points hold, you may want to install the Hook Machine on some server of your own! If you do not need periodic checks (point 4. above), that may not be worth the hassle. Check the concrete example section near the end of this text for a practical scenario.
+If all points hold, you may want to install the Hook Machine on some server of your own! If you do not need periodic checks (point 4. above), that may not be worth the hassle. Check the [concrete example](#a-concrete-example) section near the end of this text for a typical usage scenario.
 
-The Hook Machine is a Node.js application that includes:
+The Hook Machine is a [Node.js](http://nodejs.org/) application that includes:
 
 - a **Web server** that listens to `git push` events received from GitHub through [Post-receive hooks](https://help.github.com/articles/post-receive-hooks) and runs a shell script in some Git repository accordingly;
 - a **periodic loop** that runs shell scripts in Git repositories to detect changes in some condition and reacts based on the result;
@@ -49,7 +51,7 @@ export HOOKMACHINE_KEY_MAIN="some private SSH key"
 npm start
 ```
 
-Check the [Configuration] section below to set the above variables accordingly.
+Check the [Configuration](#configuration) section below to set the above variables accordingly.
 
 Once the Hook Machine is up and running, set the WebHook URL of Git repositories that the Hook Machine should manage on GitHub to `[Hook Machine HTTP address]/github/callback?secret=[HOOK_SECRET]` and start pushing.
 
@@ -219,6 +221,12 @@ This is meant for environments such as Heroku that do not expose the `npm` utili
 
 The Hook Machine uses [Woodman](http://joshfire.github.io/woodman/) to send logs to the console (override the `WOODMAN` setting to change Woodman's configuration), reporting errors as they occur.
 
+### Deployment to Heroku
+
+The Hook Machine should run fine on Heroku... provided the Web dyno the Hook Machine is deployed never switched to idle. In particular, while the Hook Machine follows a very usual approach of running long-lasting tasks in the background, it is implemented as an all-in-one machine that does not fit [Heroku's process model](https://devcenter.heroku.com/articles/background-jobs-queueing) for background jobs.
+
+To be more Heroku-friendly, the Hook Machine would run a Web dyno that listens to requests from GitHub, a Worker dyno that runs the tasks, a scheduler that schedules check tasks once in a while (the [Heroku Scheduler](https://addons.heroku.com/scheduler) add-on would do the trick) and some message queue to pass the tasks around between dynos (e.g. [CloudAMQP](https://addons.heroku.com/cloudamqp)). This is extremely scalable but seems overly complex for a machine that does not really need to scale in practice and that should remain easy to deploy and monitor in other environments, typically on a local machine.
+
 
 ## A concrete example
 
@@ -279,6 +287,14 @@ The following Hook Machine configuration sets the two GitHub post-receive hooks 
   }
 }
 ```
+
+
+## Security considerations
+
+Automating the publication of something is a good idea... until someone hits the wrong button by mistake and triggers the deployment of code and content that was not meant to be deployed. There is no easy way in Git to manage permissions per branch. Said differently, you cannot easily give push permissions to someone on a `dev` branch but not on `master`.
+
+Use the Hook Machine with care!
+
 
 ## License
 
