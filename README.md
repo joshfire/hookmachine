@@ -4,7 +4,7 @@
 > E pou vou an ka fèy an chantan"
 >
 > "Cleaning, Sweeping, Polishing  
-> Keeping your house clean
+> Keeping your house clean  
 > I cook for you, I give you love  
 > Singing along, just for you"
 >
