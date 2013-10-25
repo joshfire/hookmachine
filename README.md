@@ -4,9 +4,9 @@
 > E pou vou an ka fèy an chantan"
 >
 > "Cleaning, Sweeping, Polishing  
-> Your home is always clean  
+> Keeping your house clean
 > I cook for you, I give you love  
-> Singing along just for you"
+> Singing along, just for you"
 >
 > [Maldòn by Zouk Machine](http://www.youtube.com/watch?v=BPdrGOFXzGA)
 
