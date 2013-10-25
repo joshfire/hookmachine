@@ -241,7 +241,7 @@ The Web site of Joshfire is assembled from different components:
 - the list of persons in the team as well
 - and so on, the point being that data feeds are not *part of* the Web site but are retrieved from third-party content providers.
 
-While the Web site needs to be updated whenever some template changes or whenever a new blog post is written, there is nothing inherently *dynamic* here. In practice, to keep the Web server as simple as possible, a series of [Grunt](http://gruntjs.com/) tasks simply create a *static* build of the Web server and that build is published to our Web server.
+While the Web site needs to be updated whenever some template changes or whenever a new blog post is written, there is nothing inherently *dynamic* here. In practice, to keep the Web server as simple as possible, a series of [Grunt](http://gruntjs.com/) tasks simply create a *static* build of the Web site and that build is published to our Web server.
 
 In terms of Git workflow, changes are committed to the `dev` branch and released to the `master` branch once a new version is ready to ship. Builds are created from the `master` branch and from an export of the data feeds (Tumblr, Google Spreadsheets, Flickr, etc.). To be able to rollback to a previous version of the Web site easily, builds are kept in a `build` branch. This is all done through a series of simple shell scripts:
 
