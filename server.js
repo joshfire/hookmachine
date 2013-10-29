@@ -182,11 +182,8 @@ Object.keys(hooks).forEach(function (name) {
 logger.log('register GitHub hooks... done');
 
 
-// Start monitoring (run every 20 minutes by default)
-logger.log('start monitoring...');
-var interval = parseInt('' + (config.PERIODIC_INTERVAL || '1200'), 10);
-logger.log('monitoring interval is ' + interval + ' seconds');
-setInterval(function () {
+// Periodic loop function
+var periodicFunction = function () {
   logger.info('periodic check...');
   if (taskqueue.getNbRunningTasks() > 0) {
     logger.info('periodic check... postponed (running task detected)');
@@ -213,10 +210,7 @@ setInterval(function () {
     taskqueue.push(params);
   });
   logger.info('periodic check... done');
-}, interval * 1000);
-logger.log('start monitoring... done, ' +
-  Object.keys(config.PERIODIC_HOOKS || {}).length + ' tasks monitored');
-
+};
 
 // Start GitHub hooks listener and delete the "repositories" folder
 // (deletion is done afterwards because that may take time and some
@@ -232,4 +226,13 @@ github.listen(function () {
     deleteFolder(repositoriesBakFolder);
     logger.log('Delete repositories folder... done');
   }
+
+  // Start monitoring (run every 20 minutes by default)
+  logger.log('start monitoring...');
+  var interval = parseInt('' + (config.PERIODIC_INTERVAL || '1200'), 10);
+  logger.log('monitoring interval is ' + interval + ' seconds');
+  setInterval(periodicFunction, interval * 1000);
+  logger.log('start monitoring... done, ' +
+    Object.keys(config.PERIODIC_HOOKS || {}).length + ' tasks monitored');
+  periodicFunction();
 });
